@@ -67,6 +67,11 @@ export class TestData {
     }
   }
 
+  /** 用指定電話建立一筆前置訂單，例如「某電話已訂該時段」 */
+  async seedReservation(target: SlotTarget, phone: string, guests = 1) {
+    await createReservation(this.request, { name: this.name(), phone, ...target, guests });
+  }
+
   /** 目前資料庫裡，本支測試建立的訂單筆數 */
   async countMine() {
     return (await this.admin.search(this.marker)).length;

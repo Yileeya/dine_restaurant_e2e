@@ -21,6 +21,8 @@ test('[TC-06-1] 剛好訂滿', { tag: ['@BR-06', '@P1'] }, async ({ page, testDa
   await test.step('準備：時段已有 15 人', () => testData.seed(target, 15));
 
   await test.step('訂 5 人', () => bookViaUi(page, testData, target, 5));
+  // 成功區塊一開始就在網頁裡（隱藏），必須先確認它顯示出來，才代表預約真的完成
+  await expect(page.getByTestId('success')).toBeVisible();
   await expect(page.getByTestId('success')).toContainText('Reservation confirmed');
 
   await test.step('該時段變為 Full', async () => {
