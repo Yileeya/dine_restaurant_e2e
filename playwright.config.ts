@@ -10,6 +10,8 @@ if (!process.env.BASE_URL) {
 
 export default defineConfig({
   testDir: './tests',
+  // 執行前清除上次中斷殘留的測試資料
+  globalSetup: './src/global-setup.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
