@@ -40,14 +40,14 @@ export class TestData {
    * 從最晚可預約日（D+30）往前，找一個完全沒有訂單的時段。
    * 同時執行的測試各自分配不同的候選時段，避免互相搶同一個時段。
    */
-  async findEmptySlot(): Promise<SlotTarget> {
+  async findEmptySlot(options: { excludeDate?: string } = {}): Promise<SlotTarget> {
     const workers = this.testInfo.config.workers;
     const mine = this.testInfo.parallelIndex;
     let index = 0;
     for (let n = 30; n >= 1; n--) {
       const date = dPlus(n);
       const candidates = SLOTS.filter(() => index++ % workers === mine);
-      if (!candidates.length) continue;
+      if (!candidates.length || date === options.excludeDate) continue;
       const availability = await getAvailability(this.request, date);
       const empty = candidates.find((slot) => availability.find((a) => a.slot === slot)?.remaining === SLOT_CAPACITY);
       if (empty) return { date, slot: empty };

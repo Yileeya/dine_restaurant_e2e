@@ -39,11 +39,13 @@ export default defineConfig({
     //   'retain-on-failure-and-retries' 保留失敗的，以及之後每次重試的
     //   'on-first-retry'                只在第一次重試時錄（本機 retries 為 0，不會觸發）
     //   'on-all-retries'                每次重試都錄
-    video: 'retain-on-failure',
-    trace: 'retain-on-failure',
+    video: 'on',
+    trace: 'on',
   },
-  // 只測 Chromium
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    // 先登入後台一次，存下登入狀態供後台測試使用
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
+    // 只測 Chromium
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] }, dependencies: ['setup'] },
   ],
 });
