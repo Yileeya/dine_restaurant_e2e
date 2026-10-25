@@ -1,10 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../src/fixtures';
 import { dPlus } from '../../src/utils/dates';
 
-test('[TC-04-1] 日期可選範圍', { tag: ['@BR-04', '@P2'] }, async ({ page }) => {
-  await page.goto('/');
+test('[TC-04-1] 日期可選範圍', { tag: ['@BR-04', '@P2'] }, async ({ bookingPage }) => {
+  await bookingPage.open();
 
-  const date = page.getByTestId('date');
-  await expect(date).toHaveAttribute('min', dPlus(1));
-  await expect(date).toHaveAttribute('max', dPlus(30));
+  await expect(bookingPage.date).toHaveAttribute('min', dPlus(1));
+  await expect(bookingPage.date).toHaveAttribute('max', dPlus(30));
 });

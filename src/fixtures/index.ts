@@ -1,9 +1,15 @@
-// 測試共用的 fixture：測試檔改從這裡 import { test, expect }，就能直接使用 testData。
+// 測試共用的 fixture：測試檔改從這裡 import { test, expect }，就能直接使用 testData 與各頁面的 Page Object。
 import { test as base, expect } from '@playwright/test';
 import { AdminApi } from '../api/reservations';
+import { AdminReservationsPage } from '../pages/AdminReservationsPage';
+import { BookingPage } from '../pages/BookingPage';
 import { TestData } from './testData';
 
-type TestFixtures = { testData: TestData };
+type TestFixtures = {
+  testData: TestData;
+  bookingPage: BookingPage;
+  adminPage: AdminReservationsPage;
+};
 type WorkerFixtures = { admin: AdminApi };
 
 export const test = base.extend<TestFixtures, WorkerFixtures>({
@@ -22,6 +28,14 @@ export const test = base.extend<TestFixtures, WorkerFixtures>({
     const testData = new TestData(request, admin, testInfo);
     await use(testData);
     await testData.cleanup();
+  },
+
+  bookingPage: async ({ page }, use) => {
+    await use(new BookingPage(page));
+  },
+
+  adminPage: async ({ page }, use) => {
+    await use(new AdminReservationsPage(page));
   },
 });
 

@@ -103,7 +103,8 @@ dine_restaurant_e2e/
 │  └─ auth.setup.ts         後台登入一次，存下登入狀態供後台測試使用
 ├─ src/
 │  ├─ api/                  受測系統 API：準備與清除前置資料
-│  ├─ fixtures/             測試共用的準備與收尾（測試資料自建自清、後台登入狀態）
+│  ├─ fixtures/             測試共用的準備與收尾（測試資料自建自清、後台登入狀態、Page Object）
+│  ├─ pages/                Page Object：各頁面的操作與元素定位
 │  ├─ utils/                共用工具：D+n 日期換算
 │  └─ global-setup.ts       執行前清除中斷殘留的測試資料
 ├─ CLAUDE.md                AI 協作規則

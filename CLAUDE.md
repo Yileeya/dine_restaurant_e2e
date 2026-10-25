@@ -10,6 +10,8 @@
 - 標籤寫成 `{ tag: ['@BR-xx', '@P1'] }`，優先級依規格書 Rules 工作表。
 - 同一條規則的測試放同一個檔：`tests/<功能>/brXX-<主題>.spec.ts`。
 - 一律用 `page.goto('/')`，不得寫死網址。
+- 畫面操作與元素定位寫在 `src/pages/` 的 Page Object，測試透過 fixture（`bookingPage`、`adminPage`）使用，不在測試裡直接寫定位。頁面新增操作時，加在對應的 Page Object；同一個操作在兩支以上測試出現，就要抽進 Page Object。
+- 斷言（預期結果）留在測試裡，讓測試讀起來對得上規格書；只有「操作完成的固定確認」可放進 Page Object，例如 `expectConfirmed()`。
 - 畫面文案以規格書「UI 文案（英文）」欄為準，一字不差，用 `toHaveText` 或 `toContainText` 驗證文字，不可只檢查元素有出現。
 - 每個檢查都必須在功能壞掉時會失敗；不得使用永遠成立的檢查，例如檢查表單存在。
 - `toHaveText`、`toContainText` 也會讀到隱藏元素的文字。驗證「操作後才出現」的區塊（成功訊息、對話框）時，先用 `toBeVisible` 確認它顯示出來。
