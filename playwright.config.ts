@@ -20,8 +20,23 @@ export default defineConfig({
     baseURL: process.env.BASE_URL,
     // 網站以台灣時間判斷「今天」，瀏覽器也要用台灣時間
     timezoneId: 'Asia/Taipei',
+
     // 失敗時才留下截圖、影片、trace，報表一打開就看得到失敗畫面
+    // 截圖可用值：
+    //   'off'              不截圖
+    //   'on'               每支測試結束都截圖
+    //   'only-on-failure'  失敗才截圖
+    //   'on-first-failure' 只截第一次失敗（搭配重試時，重跑不再截）
     screenshot: 'only-on-failure',
+
+    // 影片與 trace 可用值相同：
+    //   'off'                           不錄
+    //   'on'                            每支都錄，通過也保留（示範、除錯用；報表會變大）
+    //   'retain-on-failure'             每支都錄，只保留失敗的
+    //   'retain-on-first-failure'       只保留第一次失敗的
+    //   'retain-on-failure-and-retries' 保留失敗的，以及之後每次重試的
+    //   'on-first-retry'                只在第一次重試時錄（本機 retries 為 0，不會觸發）
+    //   'on-all-retries'                每次重試都錄
     video: 'retain-on-failure',
     trace: 'retain-on-failure',
   },
