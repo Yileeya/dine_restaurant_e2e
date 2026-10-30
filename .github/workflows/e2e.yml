@@ -12,7 +12,8 @@ on:
 
 jobs:
   e2e:
-    runs-on: ubuntu-latest
+    # 固定作業系統版本，和套件定版同理：避免 GitHub 換版時測試環境悄悄改變
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
       # 對應本機 .env 的三個值，存在 GitHub 的 Secrets
@@ -40,7 +41,7 @@ jobs:
       # 測試失敗也要上傳報表，才看得到失敗的原因
       - name: 上傳報表
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: playwright-report/
