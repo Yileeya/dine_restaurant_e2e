@@ -1,0 +1,47 @@
+# 在 GitHub 的 Actions 分頁按「Run workflow」，於雲端執行 E2E 測試，報表附在執行結果的 Artifacts。
+# 報表的 trace 含登入請求（帳密），所以不發布成公開網址，只給專案成員下載。
+name: E2E Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      grep:
+        description: '只跑符合條件的測試，例如 @P1、@BR-06、TC-06-2；留空跑全部'
+        required: false
+        default: ''
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # 對應本機 .env 的三個值，存在 GitHub 的 Secrets
+      BASE_URL: ${{ secrets.BASE_URL }}
+      ADMIN_USER: ${{ secrets.ADMIN_USER }}
+      ADMIN_PASS: ${{ secrets.ADMIN_PASS }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: 安裝套件
+        run: npm install
+
+      - name: 安裝 Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: 執行測試
+        env:
+          GREP: ${{ inputs.grep }}
+        run: npx playwright test ${GREP:+--grep "$GREP"}
+
+      # 測試失敗也要上傳報表，才看得到失敗的原因
+      - name: 上傳報表
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 1
