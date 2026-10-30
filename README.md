@@ -49,6 +49,19 @@ npm test
 | `npx playwright test --grep @P1` | 只跑 P1 優先級的測試 |
 | `npx playwright test --grep "TC-06-2"` | 只跑單一測試案例 |
 
+## 雲端執行（GitHub Actions）
+
+以 [`.github/workflows/e2e.yml`](.github/workflows/e2e.yml) 手動觸發：Actions → **E2E Tests** → **Run workflow**。可輸入篩選條件（如 `@P1`、`@BR-06`、`TC-06-2`），留空執行全部。
+
+| 項目 | 說明 |
+|---|---|
+| 前置設定 | 在 repo 的 Settings → Secrets and variables → Actions 新增 `BASE_URL`、`ADMIN_USER`、`ADMIN_PASS` |
+| 執行環境 | `ubuntu-24.04`、Node.js 24、Chromium；版本固定，避免環境隨平台升級改變 |
+| 報表 | 以 Artifact（`playwright-report`）附在每次執行的結果頁，保留 1 天，僅專案成員可下載 |
+| 查看報表 | 解壓縮至專案根目錄的 `playwright-report/` 後執行 `npm run report`；直接開啟 `index.html` 無法使用 trace 回放 |
+
+報表的 trace 會記錄測試期間的網路請求，包含後台登入，因此不發布為公開網頁（GitHub Pages）。
+
 ## 設定
 
 ### 環境變數
@@ -94,6 +107,8 @@ npm test
 
 ```
 dine_restaurant_e2e/
+├─ .github/workflows/
+│  └─ e2e.yml               雲端執行流程（手動觸發）
 ├─ docs/
 │  └─ 規格書_v1.xlsx        規格書
 ├─ tests/
